@@ -93,6 +93,7 @@ sleep (20)
 while 1 :
     timestamp=str(datetime.now().time())[:8]
     cpu= psutil.cpu_percent()
+    mem=float(psutil.virtual_memory().used) * 100 / float(psutil.virtual_memory().total)
     lcd.clear()
-    lcd.message ( "{}\nCPU {:3.0f}%".format(timestamp, cpu))
+    lcd.message ( "{}\nCPU% {:3.0f} MEM {:3.0f} ".format(timestamp, cpu,mem))
     sleep(1)
