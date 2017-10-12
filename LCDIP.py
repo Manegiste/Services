@@ -91,8 +91,8 @@ if __name__ == '__main__':
 sleep (20)
 
 while 1 :
-    string="CPU " + str(psutil.cpu_percent()) + "%"
     timestamp=str(datetime.now().time())[:8]
+    cpu= psutil.cpu_percent()
     lcd.clear()
-    lcd.message ( "%s\n%s" % (timestamp, string ))
+    lcd.message ( "{}\nCPU {:3.0f}%".format(timestamp, cpu))
     sleep(1)
