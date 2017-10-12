@@ -4,6 +4,8 @@
 import RPi.GPIO as GPIO
 import netifaces
 from time import sleep
+from datetime import datetime
+import psutil
 
 class HD44780:
 
@@ -81,13 +83,16 @@ for t in range(5):
       WifAd = "No wifi"
       sleep(5)
 
-print (EthAd)
-print (WifAd)
-
 if __name__ == '__main__':
     lcd = HD44780()
     lcd.clear()
     lcd.message("%s\n%s" % ( WifAd , EthAd))
-    
-# Pour affichage IP + adresse MAC, utilisez :
-# lcd.message("%s\n%s" % (netifaces.ifaddresses('eth0')[netifaces.AF_LINK][0]['addr'], netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr'])
+
+sleep (20)
+
+while 1 :
+    string="CPU " + str(psutil.cpu_percent()) + "%"
+    timestamp=str(datetime.now().time())[:8]
+    lcd.clear()
+    lcd.message ( "%s\n%s" % (timestamp, string ))
+    sleep(1)
