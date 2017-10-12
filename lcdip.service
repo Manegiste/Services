@@ -1,0 +1,12 @@
+[Unit]
+Description=lcdip
+Wants=network-online.target 
+After=network.target network-online.target ssh.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/LCDIP_V2.py
+
+[Install]
+WantedBy=multi-user.target

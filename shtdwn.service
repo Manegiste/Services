@@ -1,0 +1,12 @@
+[Unit]
+Description=lcdip
+Wants=network-online.target 
+After=network.target network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/SHTDWN.py
+
+[Install]
+WantedBy=multi-user.target
