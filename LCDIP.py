@@ -65,10 +65,29 @@ class HD44780:
     def __del__(self):
         GPIO.cleanup()
 
+for t in range(5):
+   try:
+      EthAd =  "E:" + netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr']
+      break
+   except:
+      EthAd = "No LAN"
+      sleep(5)
+
+for t in range(5):
+   try:
+      WifAd =  "W:" + netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+      break
+   except:
+      WifAd = "No wifi"
+      sleep(5)
+
+print (EthAd)
+print (WifAd)
+
 if __name__ == '__main__':
     lcd = HD44780()
     lcd.clear()
-    lcd.message("Mon IP:\n%s" %  netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr'])
-
-    # Pour affichage IP + adresse MAC, utilisez :
+    lcd.message("%s\n%s" % ( WifAd , EthAd))
+    
+# Pour affichage IP + adresse MAC, utilisez :
 # lcd.message("%s\n%s" % (netifaces.ifaddresses('eth0')[netifaces.AF_LINK][0]['addr'], netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr'])
