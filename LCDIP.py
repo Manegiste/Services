@@ -9,8 +9,7 @@ import psutil
 
 class HD44780:
 
-    def __init__(self, pin_rs=40, pin_e=38, pins_db=[37, 35, 33, 31]):
-
+    def __init__(self, pin_rs=7, pin_e=11, pins_db=[12, 13, 15, 16]):
         self.pin_rs = pin_rs
         self.pin_e = pin_e
         self.pins_db = pins_db
