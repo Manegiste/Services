@@ -68,7 +68,7 @@ class HD44780:
 
 for t in range(5):
    try:
-      EthAd =  "E:" + netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr']
+      EthAd =  "E:" + netifaces.ifaddresses('eth1')[netifaces.AF_INET][0]['addr']
       break
    except:
       EthAd = "No LAN"
