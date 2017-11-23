@@ -71,7 +71,7 @@ GPIO.setmode(GPIO.BOARD)
 # pin id for the shutdown button
 GPIO_shutdown=32
 # pin id for the LED status
-GPIO_led=11
+GPIO_led=36
 
 # GPIO_shutdown will be an input pin
 GPIO.setup(GPIO_shutdown, GPIO.IN, pull_up_down=GPIO.PUD_UP)
