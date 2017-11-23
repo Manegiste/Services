@@ -7,6 +7,7 @@ from time import sleep
 from datetime import datetime
 import psutil
 
+
 class HD44780:
 
     def __init__(self, pin_rs=7, pin_e=11, pins_db=[12, 13, 15, 16]):
@@ -70,6 +71,9 @@ class HD44780:
 
     def __del__(self):
         GPIO.cleanup()
+#end class
+
+mode=0
 
 for t in range(5):
    try:
@@ -92,12 +96,26 @@ if __name__ == '__main__':
     lcd.clear()
     lcd.message("%s\n%s" % ( WifAd , EthAd))
 
-sleep (20)
+#sleep (20)
+
+def funcMode(channel):
+    global mode
+    mode=mode+1 
+    if mode >= 2:
+        mode=0
+
+GPIO_mode=33 #Button to switch mode
+GPIO.setup(GPIO_mode, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.add_event_detect(GPIO_mode, GPIO.FALLING, callback=funcMode, bouncetime=300)
+
 
 while 1 :
     timestamp=str(datetime.now().time())[:8]
     cpu= psutil.cpu_percent()
     mem=float(psutil.virtual_memory().used) * 100 / float(psutil.virtual_memory().total)
     lcd.home()
-    lcd.message ( "{}\nCPU% {:3.0f} MEM {:3.0f} ".format(timestamp, cpu,mem))
+    if mode == 0:
+        lcd.message("%s\n%s" % ( WifAd.ljust(16) , EthAd.ljust(16)))
+    else:
+        lcd.message ( "{}\nCPU% {:3.0f} MEM {:3.0f} ".format(timestamp, cpu,mem))
     sleep(1)
