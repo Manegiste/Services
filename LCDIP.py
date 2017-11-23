@@ -29,6 +29,11 @@ class HD44780:
 	self.cmd(0x0C) # Pas de curseur
 	self.cmd(0x06) # Incrémentation curseur
 	self.cmd(0x01) # Efface écran
+
+    def home(self):
+	self.cmd(0x0C) # Pas de curseur
+	self.cmd(0x06) # Incrémentation curseur
+	self.cmd(0x02) # "Home" : curseur en haut à gauche
 	
     def cmd(self, bits, char_mode=False):
         sleep(0.005)
@@ -93,6 +98,6 @@ while 1 :
     timestamp=str(datetime.now().time())[:8]
     cpu= psutil.cpu_percent()
     mem=float(psutil.virtual_memory().used) * 100 / float(psutil.virtual_memory().total)
-    lcd.clear()
+    lcd.home()
     lcd.message ( "{}\nCPU% {:3.0f} MEM {:3.0f} ".format(timestamp, cpu,mem))
     sleep(1)
