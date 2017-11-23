@@ -98,6 +98,7 @@ def funcShutdown(channel):
          intSeconds = time.time() - start_time
          time.sleep(0.1)
     if intSeconds >= maxWaitPushButton:
+        os.system('sudo service lcdip stop')
         lcd = HD44780()
         lcd.clear()
         lcd.message("Shutting down...\nBye!")
