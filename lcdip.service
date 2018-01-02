@@ -1,5 +1,5 @@
 [Unit]
-Description=lcdip
+Description=lcdip: show ip and other info on the LCD
 Wants=network-online.target 
 After=network.target network-online.target ssh.service
 
