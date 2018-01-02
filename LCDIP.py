@@ -6,6 +6,7 @@ import netifaces
 from time import sleep
 from datetime import datetime
 import psutil
+import os
 
 
 class HD44780:
@@ -75,33 +76,17 @@ class HD44780:
 
 mode=0
 
-for t in range(5):
-   try:
-      EthAd =  "E:" + netifaces.ifaddresses('eth1')[netifaces.AF_INET][0]['addr']
-      break
-   except:
-      EthAd = "No LAN"
-      sleep(5)
-
-for t in range(5):
-   try:
-      WifAd =  "W:" + netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
-      break
-   except:
-      WifAd = "No wifi"
-      sleep(5)
 
 if __name__ == '__main__':
     lcd = HD44780()
     lcd.clear()
-    lcd.message("%s\n%s" % ( WifAd , EthAd))
 
 #sleep (20)
 
 def funcMode(channel):
     global mode
     mode=mode+1 
-    if mode >= 2:
+    if mode >= 3:
         mode=0
 
 GPIO_mode=33 #Button to switch mode
@@ -112,10 +97,22 @@ GPIO.add_event_detect(GPIO_mode, GPIO.FALLING, callback=funcMode, bouncetime=300
 while 1 :
     timestamp=str(datetime.now().time())[:8]
     cpu= psutil.cpu_percent()
+    temp= os.popen('vcgencmd measure_temp').readline()[5:11]
     mem=float(psutil.virtual_memory().used) * 100 / float(psutil.virtual_memory().total)
     lcd.home()
     if mode == 0:
-        lcd.message("%s\n%s" % ( WifAd.ljust(16) , EthAd.ljust(16)))
-    else:
+       try:
+          EthAd =  "E:" + netifaces.ifaddresses('eth1')[netifaces.AF_INET][0]['addr']
+       except:
+          EthAd = "No LAN"
+
+       try:
+          WifAd =  "W:" + netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+       except:
+          WifAd = "No wifi"
+       lcd.message("%s\n%s" % ( WifAd.ljust(16) , EthAd.ljust(16)))
+    elif mode == 1:
         lcd.message ( "{}\nCPU% {:3.0f} MEM {:3.0f} ".format(timestamp, cpu,mem))
+    elif mode == 2:
+        lcd.message ("Temp: {} \nCPU% {:11.0f}".format(temp,cpu))
     sleep(1)
