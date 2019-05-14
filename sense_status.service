@@ -6,7 +6,7 @@ After=network.target network-online.target ssh.service
 [Service]
 Type=oneshot
 RemainAfterExit=no
-ExecStart=/usr/local/bin/sense_status.py
+ExecStart=/usr/local/bin/sense_status_ip.py
 
 [Install]
 WantedBy=multi-user.target
