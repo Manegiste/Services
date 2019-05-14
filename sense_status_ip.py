@@ -12,6 +12,11 @@ red=(128,0,0)
 green=(0,128,0)
 blue=(0,0,128)
 
+def show_error(column):
+    for y in range(0,8):
+        sense.set_pixel(column,y,red)
+        sense.set_pixel(column+1,y,red)
+
 
 def show_address(address, column):
     #Show address address
@@ -45,9 +50,15 @@ sense = SenseHat()
 sense.set_rotation(270)
 sense.clear()
 
-eth0=netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr']
-wlan=netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+try:
+    eth0=netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr']
+    show_address(eth0,x_eth) 
+except:
+    show_error(x_eth)
 
-show_address(eth0,x_eth) 
-show_address(netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr'],
-             x_wlan)
+try:
+    wlan=netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+    show_address(wlan,x_wlan)
+except:
+    show_error(x_wlan)
+
