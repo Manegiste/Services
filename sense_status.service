@@ -1,0 +1,12 @@
+[Unit]
+Description=lcdip: show ip on senseHat
+Wants=network-online.target 
+After=network.target network-online.target ssh.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/usr/local/bin/sense_status.py
+
+[Install]
+WantedBy=multi-user.target
