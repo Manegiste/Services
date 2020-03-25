@@ -1,7 +1,8 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3.8
 from sense_hat import SenseHat
 import netifaces
 import time
+import asyncio
 
 # define a column for ethO and one for wlan
 x_eth=2
@@ -19,14 +20,15 @@ def show_error(column):
         sense.set_pixel(column+1,y*2+1,red)
 
 
-def show_time(time, column):
+def show_time(column):
     #Show address address
     color=red
     for y in range(0,8):
-        if( time == y-1):
-            sense.set_pixel(column, y, color)
+       # if( time == y+1):
+       sense.set_pixel(column, y, color)
 
-def show_address(address, column, error=False):
+def show_address(address, column):
+    auto_rotate_display()
     #Show address address
     if address.split(".")[0]=='192':
         color=color_192
@@ -37,9 +39,6 @@ def show_address(address, column, error=False):
     else:
         color=red
         show=False
-
-    if error:
-        color=red
    
     addr=int(address.split(".")[3])
     for y in range(0,8):
@@ -78,34 +77,20 @@ def auto_rotate_display():
     sense.set_rotation(rot)
 
 #
+async def get_address(name, x_addr):
+    while(True):
+        try:
+            addr=netifaces.ifaddresses(name)[netifaces.AF_INET][0]['addr']
+            show_address(addr, x_addr) 
+            erroreth=False
+        except:
+            show_time(x_addr) 
+        asyncio.sleep(5)
+
 # Initialize Sensehat with the current orientation
 #
 sense = SenseHat()
 auto_rotate_display()
 sense.clear()
-
-erroreth=False
-errorwlan=False
-tried=0
-
-
-eth0=""
-wlan=""
-
-while "Not found all addresses yet":
-    auto_rotate_display()
-    try:
-        oldeth0=eth0
-        eth0=netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr']
-        show_address(eth0,x_eth) 
-    except:
-        show_address(oldeth0,x_eth, True) 
-
-    try:
-        oldwlan=wlan
-        wlan=netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
-        show_address(wlan,x_wlan)
-    except:
-        show_address(oldwlan,x_wlan, True)
-
-    time.sleep(2)
+asyncio.create_task(get_address('eth0', x_eth),name='ETH0')
+asyncio.create_task(get_address('wlan0', x_wlan), name='WLAN')
